@@ -1,6 +1,8 @@
 package kr.hxi.retrofit_example;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +11,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+
+import kr.hxi.retrofit_example.RecyclerView.UserAdapter;
+import kr.hxi.retrofit_example.RecyclerView.UserModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -17,16 +23,20 @@ public class MainActivity extends AppCompatActivity {
 
     private RetrofitService retrofitService;
 
-    private ImageView ivAvatar;
-    private TextView tvResponse;
+    private RecyclerView rvUserList;
+    private UserAdapter rvUserListAdapter;
+
+    private ArrayList<UserModel> userList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ivAvatar = findViewById(R.id.iv_avatar);
-        tvResponse = findViewById(R.id.tv_response);
+        rvUserList = findViewById(R.id.rv_user_list);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        rvUserList.setLayoutManager(layoutManager);
 
         // Retrofit 인터페이스 구현체 가져오기
         retrofitService = RetrofitClient.getRetrofitService();
@@ -39,8 +49,20 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                 if (response.isSuccessful()) {
                     UserModel user = response.body();
+                    Log.d("Retrofit Status", user.toString());
 
-                    setUserData(user);
+                    String login = user.getLogin();
+                    int id = user.getId();
+                    String name = user.getName();
+                    String htmlUrl = user.getHtmlUrl();
+                    String location = user.getLocation();
+
+                    user = new UserModel(login, id, name, htmlUrl, location);
+
+                    rvUserListAdapter = new UserAdapter(userList);
+                    rvUserList.setAdapter(rvUserListAdapter);
+
+                    userList.add(user);
                 } else {
                     Log.e("Retrofit Status", "요청 실패");
                 }
@@ -51,19 +73,5 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("Retrofit Status", "네트워크 오류 또는 요청 실패: " + t.getMessage());
             }
         });
-
     } // onCreate
-
-    private void setUserData(UserModel user) {
-        String userData =
-                "Login: " + user.getLogin() +
-                "\nID: " + user.getId() +
-                "\nhtml_url: " + user.getHtmlUrl() +
-                "\nName: " + user.getName() +
-                "\nLocation: " + user.getLocation();
-        tvResponse.setText(userData);
-
-        String avatarUrl = user.getAvatarUrl();
-        Glide.with(this).load(avatarUrl).into(ivAvatar);
-    }
 }

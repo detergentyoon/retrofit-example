@@ -1,5 +1,6 @@
 package kr.hxi.retrofit_example;
 
+import kr.hxi.retrofit_example.RecyclerView.UserModel;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
