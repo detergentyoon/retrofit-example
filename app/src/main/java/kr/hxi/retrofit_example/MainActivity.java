@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                     if (response.isSuccessful()) {
                         UserModel user = response.body();
+                        /** user의 구성 값은 어떻게 형성되어 있을까?
+                         * response.body()의 내부가 어떤 구조로 이루어져 있는지 확인 */
                         Log.d("Retrofit Status", user.toString());
 
                         String login = user.getLogin();
@@ -72,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
 
                         userList.add(user);
                     } else {
+                        /** '요청 실패'라고만 log를 표출하면 정확하게 어떤 상태인지 알 수 없다.
+                         * response.isSuccessful() == true 가 아닌 어떤 경우에 else를 타게 될까? */
                         Toast.makeText(MainActivity.this, R.string.non_existent_user, Toast.LENGTH_SHORT).show();
                         Log.e("Retrofit Status", "요청 실패");
                     }
@@ -79,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<UserModel> call, Throwable t) {
+                    /** 에러 로그만 표시해주면 사용자는 뭐가 문제인지 알 수 없다. */
                     Log.e("Retrofit Status", "네트워크 오류 또는 요청 실패: " + t.getMessage());
                 }
             });
