@@ -1,13 +1,15 @@
 package kr.hxi.retrofit_example.RecyclerView;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -40,12 +42,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView avatarUrl, login, id, htmlUrl, name, location;
+        ImageView avatarUrl;
+        TextView login, id, htmlUrl, name, location;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-//            avatarUrl = itemView.findViewById(R.id.item_avatar_url);
+            avatarUrl = itemView.findViewById(R.id.item_avatar_url);
             login = itemView.findViewById(R.id.item_login);
             id = itemView.findViewById(R.id.item_id);
             name = itemView.findViewById(R.id.item_name);
@@ -54,12 +57,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         }
 
         public void onBind(UserModel user) {
-//            avatarUrl.setText(userModel.getAvatarUrl());
+            setUrlImage(user, avatarUrl, itemView);
             login.setText(user.getLogin());
             id.setText(String.valueOf(user.getId()));
             name.setText(user.getName());
             htmlUrl.setText(user.getHtmlUrl());
             location.setText(user.getLocation());
         }
+    }
+
+    private void setUrlImage(UserModel user, ImageView urlImage, View itemView) {
+        String url = user.getAvatarUrl();
+        Glide.with(itemView).load(url).into(urlImage);
     }
 }

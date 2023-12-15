@@ -10,8 +10,8 @@ public class UserModel {
     @SerializedName("id")
     private int id;
 
-//    @SerializedName("avatar_url")
-//    private String avatarUrl;
+    @SerializedName("avatar_url")
+    private String avatarUrl;
 
     @SerializedName("html_url")
     private String htmlUrl;
@@ -22,7 +22,8 @@ public class UserModel {
     @SerializedName("location")
     private String location;
 
-    public UserModel(String login, int id, String name, String htmlUrl, String location) {
+    public UserModel(String avatarUrl, String login, int id, String name, String htmlUrl, String location) {
+        this.avatarUrl = avatarUrl;
         this.login = login;
         this.id = id;
         this.name = name;
@@ -38,9 +39,9 @@ public class UserModel {
         return id;
     }
 
-//    public String getAvatarUrl() {
-//        return avatarUrl;
-//    }
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
 
     public String getHtmlUrl() {
         return htmlUrl;

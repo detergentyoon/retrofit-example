@@ -61,13 +61,14 @@ public class MainActivity extends AppCompatActivity {
                          * response.body()의 내부가 어떤 구조로 이루어져 있는지 확인 */
                         Log.d("Retrofit Status", user.toString());
 
+                        String avatarUrl = user.getAvatarUrl();
                         String login = user.getLogin();
                         int id = user.getId();
                         String name = user.getName();
                         String htmlUrl = user.getHtmlUrl();
                         String location = user.getLocation();
 
-                        user = new UserModel(login, id, name, htmlUrl, location);
+                        user = new UserModel(avatarUrl, login, id, name, htmlUrl, location);
 
                         rvUserListAdapter = new UserAdapter(userList);
                         rvUserList.setAdapter(rvUserListAdapter);
